@@ -12,7 +12,7 @@ export default function ProtectedLayout({
 
         <div>Katie App</div>
       </header>
-      <main className="flex-1">{children}</main>
+      {children}
     </>
   );
 }
