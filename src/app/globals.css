@@ -81,3 +81,8 @@ textarea:not([rows]) {
 :target {
   scroll-margin-block: 5ex;
 }
+
+@theme {
+  --color-neutral-border: #00000033;
+  --header-height: 70px;
+}
