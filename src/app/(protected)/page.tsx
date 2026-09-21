@@ -2,7 +2,6 @@ import { PageWrapper } from '@/components/PageWrapper';
 import { auth } from '@/auth/auth';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { LogoutButton } from '@/components/Buttons/LogoutButton';
 import { VerificationToast } from '@/app/_components/VerificationToast';
 import { SessionObserver } from '@/components/SessionObserver';
 
@@ -13,7 +12,6 @@ export default async function HomePage() {
     <PageWrapper wrapperClassName="p-6">
       <SessionObserver />
       <VerificationToast />
-      <LogoutButton />
     </PageWrapper>
   );
 }
