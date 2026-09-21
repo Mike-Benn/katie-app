@@ -5,6 +5,12 @@ import { redirect } from 'next/navigation';
 import { SignUpFlow } from '@/app/auth/signup/_components/SignUpFlow';
 import { Separator } from '@base-ui/react';
 import Link from 'next/link';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Sign Up',
+};
+
 export default async function SignUpPage() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (session) redirect('/');

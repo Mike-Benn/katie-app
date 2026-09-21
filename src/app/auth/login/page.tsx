@@ -4,8 +4,13 @@ import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { Separator } from '@base-ui/react';
 import Link from 'next/link';
-
 import { SignInFlow } from '@/app/auth/login/_components/SignInFlow';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Sign In',
+};
+
 export default async function LogInPage() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (session) redirect('/');
