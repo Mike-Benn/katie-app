@@ -80,7 +80,6 @@ export function SignUpForm({ onFormSuccess, footerContent }: SignUpFormProps) {
               toast.error('Something went wrong on our end. Please try again.');
               if (process.env.NODE_ENV === 'development') console.error(ctx.error.code);
             }
-            console.log(ctx.error);
             setIsPending(false);
           },
         },
