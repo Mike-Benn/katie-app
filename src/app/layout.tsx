@@ -3,8 +3,11 @@ import './globals.css';
 import { Toaster } from 'sonner';
 
 export const metadata: Metadata = {
-  title: 'Base App',
-  description: 'Welcome to Base App',
+  title: {
+    template: '%s | Katie App',
+    default: 'Katie App',
+  },
+  description: 'Welcome to Katie App',
 };
 
 export default function RootLayout({
