@@ -1,0 +1,127 @@
+'use client';
+
+import { authClient } from '@/auth/auth-client';
+import { useAppForm } from '@/hooks/forms/useAppForm';
+import { Form } from '@base-ui/react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { z } from 'zod';
+import { toast } from 'sonner';
+import { CircleAlert } from 'lucide-react';
+
+import { isSignInErrorCode } from '@/app/auth/login/_lib/signInErrors';
+import { revalidateLogic } from '@tanstack/react-form';
+
+const emailSchema = z.email('Please enter a valid email.');
+const passwordSchema = z.string().min(1, { error: 'Password is required.' });
+
+interface SignInFormProps {
+  onEmailNotVerified: (email: string) => void;
+  footerContent: React.ReactNode;
+}
+export function SignInForm({ onEmailNotVerified, footerContent }: SignInFormProps) {
+  const [isPending, setIsPending] = useState(false);
+  const [showInvalidCredentialsError, setShowInvalidCredentialsError] = useState(false);
+
+  const router = useRouter();
+  const form = useAppForm({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+    validationLogic: revalidateLogic({ mode: 'submit', modeAfterSubmission: 'change' }),
+    validators: {
+      onDynamic: z.object({ email: emailSchema, password: passwordSchema }),
+    },
+
+    onSubmit: async ({ value }) => {
+      await authClient.signIn.email(
+        {
+          email: value.email,
+          password: value.password,
+          callbackURL: '/',
+        },
+        {
+          onRequest: () => {
+            setIsPending(true);
+          },
+          onSuccess: () => {
+            setIsPending(false);
+            router.push('/');
+          },
+          onError: (ctx) => {
+            if (ctx.error.status === 429) {
+              toast.error('Too many attempts, please wait a minute and try again.');
+            } else if (isSignInErrorCode(ctx.error.code)) {
+              if (ctx.error.code === 'EMAIL_NOT_VERIFIED') {
+                onEmailNotVerified(value.email);
+              } else {
+                setShowInvalidCredentialsError(true);
+              }
+            } else {
+              if (process.env.NODE_ENV === 'development') {
+                console.error(ctx.error);
+              }
+              toast.error('Something went wrong on our end. Please try again.');
+            }
+            setIsPending(false);
+          },
+        },
+      );
+    },
+  });
+
+  return (
+    <>
+      <div className="flex flex-col gap-5 pb-5">
+        <div className="flex flex-col gap-3">
+          <h1 className="text-2xl font-semibold">Welcome back</h1>
+          <span className="text-sm">Sign in to continue</span>
+        </div>
+        <Form
+          onSubmit={(e) => e.preventDefault()}
+          onChange={() => {
+            if (showInvalidCredentialsError) {
+              setShowInvalidCredentialsError(false);
+            }
+          }}
+        >
+          <div className="flex flex-col gap-6">
+            <form.AppField
+              name="email"
+              children={(field) => (
+                <field.TextField label="Email" placeholder="example@example.com" maxLength={128} />
+              )}
+            />
+            <form.AppField
+              name="password"
+              children={(field) => (
+                <field.TextField label="Password" isPassword={true} maxLength={64} />
+              )}
+            />
+            {showInvalidCredentialsError && (
+              <div className="flex items-center gap-1">
+                <CircleAlert color="red" size={16} />
+                <span className="text-red-500 text-sm">Incorrect email or password.</span>
+              </div>
+            )}
+          </div>
+          <div className="mt-6">
+            <form.AppForm>
+              <form.SubmitButton
+                className="w-full bg-indigo-700 py-3 rounded-sm text-white flex items-center justify-center gap-3"
+                isPending={isPending}
+                isPendingText="Signing in"
+                textClassName="text-sm font-semibold"
+                iconSize="h-4 w-4"
+              >
+                Sign in
+              </form.SubmitButton>
+            </form.AppForm>
+          </div>
+        </Form>
+      </div>
+      {footerContent}
+    </>
+  );
+}
