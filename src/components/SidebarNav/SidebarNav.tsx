@@ -1,3 +1,4 @@
+'use client';
 import { Dialog } from '@base-ui/react';
 import { Menu } from 'lucide-react';
 import { LogoutButton } from '@/components/Buttons/LogoutButton';
@@ -6,14 +7,20 @@ import { House } from 'lucide-react';
 import { CircleDollarSign } from 'lucide-react';
 import { Leaf } from 'lucide-react';
 import { Plane } from 'lucide-react';
+import { useState } from 'react';
 
 interface SidebarNavProps {
   size: number;
 }
 
 export function SidebarNav({ size }: SidebarNavProps) {
+  const [open, setOpen] = useState(false);
+  const handleLinkClick = () => {
+    setOpen(false);
+  };
+
   return (
-    <Dialog.Root>
+    <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger className="rounded-full transition-colors hover:bg-gray-200 p-2 cursor-pointer">
         <Menu size={size} />
       </Dialog.Trigger>
@@ -26,6 +33,7 @@ export function SidebarNav({ size }: SidebarNavProps) {
                 <Link
                   href="/"
                   className="flex pl-4 py-3 gap-3 transition-colors hover:bg-gray-200 hover:text-gray-900"
+                  onClick={handleLinkClick}
                 >
                   <House />
                   <span>Home</span>
@@ -33,6 +41,7 @@ export function SidebarNav({ size }: SidebarNavProps) {
                 <Link
                   href="/paycheck"
                   className="flex pl-4 py-3 gap-3 transition-colors hover:bg-gray-200 hover:text-gray-900"
+                  onClick={handleLinkClick}
                 >
                   <CircleDollarSign />
                   <span>Paycheck</span>
@@ -40,6 +49,7 @@ export function SidebarNav({ size }: SidebarNavProps) {
                 <Link
                   href="/health"
                   className="flex pl-4 py-3 gap-3 transition-colors hover:bg-gray-200 hover:text-gray-900"
+                  onClick={handleLinkClick}
                 >
                   <Leaf />
                   <span>Health</span>
@@ -47,6 +57,7 @@ export function SidebarNav({ size }: SidebarNavProps) {
                 <Link
                   href="/america"
                   className="flex pl-4 py-3 gap-3 transition-colors hover:bg-gray-200 hover:text-gray-900"
+                  onClick={handleLinkClick}
                 >
                   <Plane />
                   <span>America</span>
