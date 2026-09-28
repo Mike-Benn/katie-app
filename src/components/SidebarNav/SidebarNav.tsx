@@ -2,12 +2,12 @@
 import { Dialog } from '@base-ui/react';
 import { Menu } from 'lucide-react';
 import { LogoutButton } from '@/components/Buttons/LogoutButton';
-import Link from 'next/link';
 import { House } from 'lucide-react';
 import { CircleDollarSign } from 'lucide-react';
 import { Leaf } from 'lucide-react';
 import { Plane } from 'lucide-react';
 import { useState } from 'react';
+import { SidebarLink } from '@/components/SidebarNav/SidebarLink';
 
 interface SidebarNavProps {
   size: number;
@@ -30,38 +30,22 @@ export function SidebarNav({ size }: SidebarNavProps) {
           <Dialog.Popup className="w-70 bg-white flex">
             <div className="flex-1 flex flex-col justify-between p-4">
               <div className="flex flex-col">
-                <Link
-                  href="/"
-                  className="flex pl-4 py-3 gap-3 transition-colors hover:bg-gray-200 hover:text-gray-900"
-                  onClick={handleLinkClick}
-                >
+                <SidebarLink href="/" onClick={handleLinkClick}>
                   <House />
                   <span>Home</span>
-                </Link>
-                <Link
-                  href="/paycheck"
-                  className="flex pl-4 py-3 gap-3 transition-colors hover:bg-gray-200 hover:text-gray-900"
-                  onClick={handleLinkClick}
-                >
+                </SidebarLink>
+                <SidebarLink href="/paycheck" onClick={handleLinkClick}>
                   <CircleDollarSign />
                   <span>Paycheck</span>
-                </Link>
-                <Link
-                  href="/health"
-                  className="flex pl-4 py-3 gap-3 transition-colors hover:bg-gray-200 hover:text-gray-900"
-                  onClick={handleLinkClick}
-                >
+                </SidebarLink>
+                <SidebarLink href="/health" onClick={handleLinkClick}>
                   <Leaf />
                   <span>Health</span>
-                </Link>
-                <Link
-                  href="/america"
-                  className="flex pl-4 py-3 gap-3 transition-colors hover:bg-gray-200 hover:text-gray-900"
-                  onClick={handleLinkClick}
-                >
+                </SidebarLink>
+                <SidebarLink href="/america" onClick={handleLinkClick}>
                   <Plane />
                   <span>America</span>
-                </Link>
+                </SidebarLink>
               </div>
               <div>
                 <LogoutButton />
