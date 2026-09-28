@@ -20,7 +20,7 @@ export function SidebarNav({ size }: SidebarNavProps) {
   };
 
   return (
-    <Dialog.Root open={open} onOpenChange={setOpen}>
+    <Dialog.Root modal={false} open={open} onOpenChange={setOpen}>
       <Dialog.Trigger className="rounded-full transition-colors hover:bg-gray-200 p-2 cursor-pointer">
         <Menu size={size} />
       </Dialog.Trigger>
